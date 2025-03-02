@@ -1,0 +1,8 @@
+name: pihole
+include:
+  - path:
+    - pihole.yml
+    - network.yml
+    - volumes.yml
+    env_file:
+    - ./stack.env

@@ -1,0 +1,36 @@
+services:
+  pihole:
+    container_name: pihole
+    build: 
+      dockerfile: ./Dockerfile
+      args:
+        VERSION: $PIVERSION
+    networks:
+      pihole_net:
+        ipv4_address: $IPADDRESS  
+    environment:
+      TZ: 'America/New_York'
+      FTLCONF_webserver_api_password: $PASSWORD
+      FTLCONF_dns_upstreams: 127.0.0.1#5335
+      FTLCONF_dns_listeningMode: 'all'
+      FTLCONF_misc_etc_dnsmasq_d: "true"
+      FTLCONF_dhcp_active: "true"
+      FTLCONF_dhcp_start: $DHCP_START
+      FTLCONF_dhcp_end: $DHCP_END
+      FTLCONF_dhcp_router: $DHCP_ROUTER
+      FTLCONF_dhcp_leaseTime: $DHCP_LEASE
+      FTLCONF_dns_domain: $DNS_DOMAIN
+    volumes:
+    - pihole:/etc/pihole
+    - logs:/var/logs
+    - ./dnsmasq.d:/etc/dnsmasq.d
+    # extract pihole.toml after you've set up pihole how you like 
+    #- ./pihole.toml:/etc/pihole/pihole.toml
+    cap_add:
+    - NET_ADMIN
+    - CAP_NET_BIND_SERVICE
+    - CAP_NET_RAW
+    - CAP_CHOWN
+    - SYS_TIME
+    - SYS_NICE
+    restart: unless-stopped

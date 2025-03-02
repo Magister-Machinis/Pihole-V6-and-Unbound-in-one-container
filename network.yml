@@ -1,0 +1,9 @@
+networks:
+  pihole_net:
+    driver: macvlan
+    driver_opts:
+      parent: ${IPVLANINTERFACE}
+    ipam:
+      config:
+        - subnet: $SUBNET
+          gateway: $DHCP_ROUTER
